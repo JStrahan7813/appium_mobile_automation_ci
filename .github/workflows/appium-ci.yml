@@ -1,0 +1,65 @@
+name: Appium Mobile Automation CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  android-ui-tests:
+    runs-on: macos-13 # Necessary for hardware accelerated nested virtualization
+    
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Python Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Set up Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Appium Server & Android Driver
+        run: |
+          npm install -g appium
+          appium driver install uiautomator2
+
+      - name: Download Target Demo APK
+        run: |
+          curl -L -o app-release.apk https://github.com/saucelabs/my-demo-app-android/releases/download/v1.0.13/mda-1.0.13-15.apk
+
+      - name: Run Appium Tests on Native Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          target: google_apis
+          arch: x86_64
+          force-avd-creation: false
+          emulator-options: -no-window -gpu off -no-audio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: |
+            # 1. Start Appium Server in the background cleanly
+            appium --log appium.log &
+            
+            # 2. Wait for Appium server to fully bind to port 4723
+            echo "Waiting for Appium server to warm up..."
+            while ! nc -z 127.0.0.1 4723; do sleep 1; done
+            
+            # 3. Execute your Python testing test suite via pytest
+            pytest -v -s tests/
+
+      - name: Upload Logs on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: appium-server-logs
+          path: appium.log
