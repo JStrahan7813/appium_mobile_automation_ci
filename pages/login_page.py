@@ -8,14 +8,16 @@ class LoginPage:
         self.sidebar_menu_button = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().descriptionContains("menu")')
         self.sidebar_login_item = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().textContains("Log In")')
         
-        # 🎯 EXPLICIT DEVELOPER-ASSIGNED FIELD RESOURCE CODES
-        # These target the exact text input containers inside the native app layout tree
-        self.username_field = (AppiumBy.ACCESSIBILITY_ID, "Username input field")
-        self.password_field = (AppiumBy.ACCESSIBILITY_ID, "Password input field")
-        self.login_button = (AppiumBy.ACCESSIBILITY_ID, "Login button")
+        # 🎯 FALLBACK STRUCTURAL INDEXING
+        # Grabs the 1st editable text box on the screen for username, 2nd for password
+        self.username_field = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().className("android.widget.EditText").instance(0)')
+        self.password_field = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().className("android.widget.EditText").instance(1)')
         
-        # Pulls the error text using standard cross-platform XPath matching
-        self.error_badge = (AppiumBy.XPATH, "//*[contains(@text, 'do not match')]")
+        # Clicks the main button containing the literal text "Log In" or "Login"
+        self.login_button = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().textContains("Log In")')
+        
+        # Pulls the warning badge string dynamically via cross-platform XPath text searching
+        self.error_badge = (AppiumBy.XPATH, "//*[contains(@text, 'do not match') or contains(@text, 'Incorrect')]")
 
     def navigate_to_login_screen(self):
         """Clicks the navigation burger menu and jumps to the form screen."""
@@ -24,7 +26,6 @@ class LoginPage:
 
     def enter_credentials(self, username, password):
         """Finds inputs and populates credential strings."""
-        # Clear the placeholder text first if present, then send keys securely
         user_input = self.driver.find_element(*self.username_field)
         user_input.clear()
         user_input.send_keys(username)
