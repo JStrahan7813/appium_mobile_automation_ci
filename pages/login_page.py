@@ -4,14 +4,15 @@ class LoginPage:
     def __init__(self, driver):
         self.driver = driver
         
-        # 🎯 APP NAVIGATION LOCATORS
-        self.sidebar_menu_button = (AppiumBy.ACCESSIBILITY_ID, "open menu")
-        self.sidebar_login_item = (AppiumBy.ACCESSIBILITY_ID, "menu item log in")
+        # 🎯 BULLETPROOF ANDROID RESOURCE LOCATORS (Updated for Build 2.2.0+)
+        # Finds the specific image menu button in the top-left action bar header
+        self.sidebar_menu_button = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().descriptionContains("menu")')
+        self.sidebar_login_item = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().textContains("Log In")')
         
-        # 🎯 LOGIN FORM FORM LOCATORS
-        self.username_field = (AppiumBy.ACCESSIBILITY_ID, "Username input field")
-        self.password_field = (AppiumBy.ACCESSIBILITY_ID, "Password input field")
-        self.login_button = (AppiumBy.ACCESSIBILITY_ID, "Login button")
+        # 🎯 STABLE FORM FIELDS
+        self.username_field = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().descriptionContains("Username")')
+        self.password_field = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().descriptionContains("Password")')
+        self.login_button = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().descriptionContains("Login")')
         self.error_badge = (AppiumBy.XPATH, "//*[contains(@text, 'do not match')]")
 
     def navigate_to_login_screen(self):
