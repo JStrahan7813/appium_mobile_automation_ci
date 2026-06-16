@@ -1,6 +1,5 @@
 import pytest
 from appium import webdriver
-from selenium.webdriver.common.by import By  # 🎯 IMPORT THE CORRECT WEB LOCATORS
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 
 @pytest.fixture(scope="function")
@@ -24,14 +23,14 @@ def test_invalid_login_error_message(driver):
     
     print("🔍 Executing functional UI assertion selectors...")
     
-    # 1. Enter bad credentials using modern "By" syntax
-    driver.find_element(By.ID, "user-name").send_keys("wrong_user")
-    driver.find_element(By.ID, "password").send_keys("wrong_password")
+    # 1. Use universal CSS selectors (The '#' symbol targets IDs perfectly in web engines)
+    driver.find_element(by="css selector", value="#user-name").send_keys("wrong_user")
+    driver.find_element(by="css selector", value="#password").send_keys("wrong_password")
     
     # 2. Fire the login sequence button action
-    driver.find_element(By.ID, "login-button").click()
+    driver.find_element(by="css selector", value="#login-button").click()
 
     # 3. Assert the targeted UI error message badge renders perfectly
-    error_text = driver.find_element(By.XPATH, "//h3[@data-test='error']").text
+    error_text = driver.find_element(by="css selector", value="h3[data-test='error']").text
     assert "do not match" in error_text.lower()
     print("✅ Success! Responsive layout verification complete.")
