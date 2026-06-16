@@ -4,14 +4,13 @@ class LoginPage:
     def __init__(self, driver):
         self.driver = driver
         
-        # 🎯 BULLETPROOF ANDROID RESOURCE LOCATORS (Updated for Build 2.2.0+)
-        # Finds the specific image menu button in the top-left action bar header
+        # 🎯 BULLETPROOF NAVIGATION SELECTORS
         self.sidebar_menu_button = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().descriptionContains("menu")')
         self.sidebar_login_item = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().textContains("Log In")')
         
-        # 🎯 STABLE FORM FIELDS
-        self.username_field = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().descriptionContains("Username")')
-        self.password_field = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().descriptionContains("Password")')
+        # 🎯 STRICT INPUT FIELD SELECTORS (Targets ONLY the editable text boxes)
+        self.username_field = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().className("android.widget.EditText").descriptionContains("Username")')
+        self.password_field = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().className("android.widget.EditText").descriptionContains("Password")')
         self.login_button = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().descriptionContains("Login")')
         self.error_badge = (AppiumBy.XPATH, "//*[contains(@text, 'do not match')]")
 
