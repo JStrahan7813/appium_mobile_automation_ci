@@ -8,7 +8,7 @@ on:
 
 jobs:
   android-ui-tests:
-    runs-on: macos-13 # Necessary for hardware accelerated nested virtualization
+    runs-on: macos-15 # Necessary for hardware accelerated nested virtualization
     
     steps:
       - name: Checkout Code Repository
