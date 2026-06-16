@@ -16,8 +16,8 @@ def driver():
     options.platform_name = "Android"
     options.automation_name = "UiAutomator2"
     
-    # Updated to the strict 'storage:filename=' modern format
-    options.set_capability("appium:app", "storage:filename=SauceLabs-Demo-App.apk")
+    # 🎯 TARGETS THE COMPLIANT DEMO BUILD WE ARE SENDING TO YOUR STORAGE
+    options.set_capability("appium:app", "storage:filename=mda-2.2.0-25.apk")
     
     options.set_capability("sauce:options", {
         "name": "Appium Real Device Mobile Portfolio Run",
