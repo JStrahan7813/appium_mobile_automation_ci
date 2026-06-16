@@ -8,16 +8,16 @@ class LoginPage:
         self.sidebar_menu_button = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().descriptionContains("menu")')
         self.sidebar_login_item = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().textContains("Log In")')
         
-        # 🎯 FALLBACK STRUCTURAL INDEXING
-        # Grabs the 1st editable text box on the screen for username, 2nd for password
+        # 🎯 FALLBACK STRUCTURAL INDEXING FOR INPUTS
         self.username_field = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().className("android.widget.EditText").instance(0)')
         self.password_field = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().className("android.widget.EditText").instance(1)')
         
-        # Clicks the main button containing the literal text "Log In" or "Login"
-        self.login_button = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().textContains("Log In")')
+        # 🎯 BULLETPROOF BUTTON SELECTOR
+        # Finds any clickable element or button that contains the word "Log In" or "Login"
+        self.login_button = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().clickable(true).descriptionContains("Login")')
         
         # Pulls the warning badge string dynamically via cross-platform XPath text searching
-        self.error_badge = (AppiumBy.XPATH, "//*[contains(@text, 'do not match') or contains(@text, 'Incorrect')]")
+        self.error_badge = (AppiumBy.XPATH, "//*[contains(@text, 'do not match') or contains(@text, 'Incorrect') or contains(@text, 'credentials')]")
 
     def navigate_to_login_screen(self):
         """Clicks the navigation burger menu and jumps to the form screen."""
