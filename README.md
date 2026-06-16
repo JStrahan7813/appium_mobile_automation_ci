@@ -1,6 +1,8 @@
 # appium_mobile_automation_ci
 Appium 2.x Android mobile automation framework running on GitHub Actions CI/CD
 
+![Real Device Automation Run Demo](assets/demo.gif)
+
 Mobile Automation & CI/CD Testing Pipeline
 This project is a fully automated testing pipeline for mobile apps. When code changes are made, a cloud server automatically triggers a suite of tests that installs the app, interacts with it, and runs verification checks on real physical smartphones inside a secure cloud testing data center (Sauce Labs via GitHub Actions).
 
