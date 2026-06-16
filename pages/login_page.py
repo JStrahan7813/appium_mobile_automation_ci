@@ -1,10 +1,12 @@
 from appium.webdriver.common.appiumby import AppiumBy
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 class LoginPage:
     def __init__(self, driver):
         self.driver = driver
         
-        # 🎯 STABLE APP NAVIGATION SELECTORS
+        # 🎯 APP NAVIGATION SELECTORS
         self.sidebar_menu_button = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().descriptionContains("menu")')
         self.sidebar_login_item = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().textContains("Log In")')
         
@@ -13,11 +15,10 @@ class LoginPage:
         self.password_field = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().className("android.widget.EditText").instance(1)')
         
         # 🎯 BULLETPROOF BUTTON SELECTOR
-        # Finds any clickable element or button that contains the word "Log In" or "Login"
         self.login_button = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().clickable(true).descriptionContains("Login")')
         
-        # Pulls the warning badge string dynamically via cross-platform XPath text searching
-        self.error_badge = (AppiumBy.XPATH, "//*[contains(@text, 'do not match') or contains(@text, 'Incorrect') or contains(@text, 'credentials')]")
+        # 🎯 Broad, flexible XPath matching for any error text elements that show up on screen
+        self.error_badge = (AppiumBy.XPATH, "//*[contains(@text, 'credentials') or contains(@text, 'Incorrect') or contains(@text, 'not match')]")
 
     def navigate_to_login_screen(self):
         """Clicks the navigation burger menu and jumps to the form screen."""
@@ -39,5 +40,8 @@ class LoginPage:
         self.driver.find_element(*self.login_button).click()
 
     def get_error_message_text(self):
-        """Extracts the validation string text from the UI."""
-        return self.driver.find_element(*self.error_badge).text
+        """Safely waits for the error element to appear on the UI before grabbing text."""
+        # ⏳ Dynamic 10-second explicit wait to catch the pop-up animation perfectly
+        wait = WebDriverWait(self.driver, 10)
+        element = wait.until(EC.presence_of_element_id_located(self.error_badge) if False else EC.visibility_of_element_located(self.error_badge))
+        return element.text
