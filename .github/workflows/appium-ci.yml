@@ -1,4 +1,4 @@
-name: Appium & Mobile Portfolio CI
+name: Appium Real Device Cloud CI
 
 on:
   push:
@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  ui-verification-tests:
-    runs-on: ubuntu-latest # Switched to Linux (runs instantly and never queues!)
+  real-device-tests:
+    runs-on: ubuntu-latest
     
     steps:
       - name: Checkout Code Repository
@@ -21,20 +21,13 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
 
-      - name: Install Python Dependencies
-        run: |
-          pip install pytest Appium-Python-Client selenium
+      - name: Install Dependencies
+        run: pip install pytest Appium-Python-Client
 
-      - name: Launch Headless Webdriver Container Engine
+      - name: Execute Cloud Appium Tests
+        # Inject your encrypted repository secrets cleanly into the runner's memory block
+        env:
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
         run: |
-          # Spins up a lightning-fast standalone chrome image mimicking our Appium endpoint
-          docker run -d -p 4444:4444 --shm-size=2g selenium/standalone-chrome:latest
-          
-          # Wait a brief moment for the network port interface to bind cleanly
-          echo "Warming up headless automation environment..."
-          sleep 5
-
-      - name: Execute Automated Test Suite
-        run: |
-          # Fire your testing framework with clean logging outputs
           pytest -v -s tests/
