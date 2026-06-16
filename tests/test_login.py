@@ -16,12 +16,12 @@ def driver():
     options.platform_name = "Android"
     options.automation_name = "UiAutomator2"
     
-    # 🎯 SAUCE LABS INTERNAL DEMO APP LINK (Guaranteed 100% uptime inside their servers)
-    options.set_capability("appium:app", "sauce-storage:SauceLabs-Demo-App.apk")
+    # Updated to the strict 'storage:filename=' modern format
+    options.set_capability("appium:app", "storage:filename=SauceLabs-Demo-App.apk")
     
     options.set_capability("sauce:options", {
         "name": "Appium Real Device Mobile Portfolio Run",
-        "build": "Build-7.0",
+        "build": "Build-8.0",
         "appiumVersion": "latest"
     })
 
