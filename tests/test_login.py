@@ -15,13 +15,14 @@ def driver():
     options = UiAutomator2Options()
     options.platform_name = "Android"
     options.automation_name = "UiAutomator2"
-    options.set_capability("appium:app", "https://github.com/saucelabs/my-demo-app-android/releases/download/v1.0.13/mda-1.0.13-15.apk")
     
-    # 🎯 APPIUM LATEST COMPLIANCE DEFINITION BLOCK
+    # 🎯 SAUCE LABS INTERNAL DEMO APP LINK (Guaranteed 100% uptime inside their servers)
+    options.set_capability("appium:app", "sauce-storage:SauceLabs-Demo-App.apk")
+    
     options.set_capability("sauce:options", {
         "name": "Appium Real Device Mobile Portfolio Run",
-        "build": "Build-6.0",
-        "appiumVersion": "latest"  # 👈 CHANGES THIS TO LATEST AS REQUESTED BY THE SERVER
+        "build": "Build-7.0",
+        "appiumVersion": "latest"
     })
 
     driver = webdriver.Remote(sauce_url, options=options)
