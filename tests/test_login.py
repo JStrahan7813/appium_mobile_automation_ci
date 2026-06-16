@@ -20,7 +20,7 @@ def driver():
     
     # 🎯 CLOUD EXCLUSIVE CAPABILITIES
     options.set_capability("appium:deviceName", "Samsung Galaxy.*") # Dynamically requests any real Samsung phone
-    options.set_capability("appium:app", "storage:filename=mda-1.0.13-15.apk") # Targets Sauce's native demo app
+    options.set_capability("appium:app", "https://github.com/saucelabs/my-demo-app-android/releases/download/v1.0.13/mda-1.0.13-15.apk")
     options.set_capability("sauce:options", {
         "name": "Appium Real Device Mobile Portfolio Run",
         "build": "Build-1.0"
