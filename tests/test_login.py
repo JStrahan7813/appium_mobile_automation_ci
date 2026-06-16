@@ -11,7 +11,7 @@ def driver():
     sauce_access_key = os.environ.get("SAUCE_ACCESS_KEY")
     
     # Target the global Sauce Labs real device cloud endpoint
-    sauce_url = f"https://{sauce_username}:{sauce_access_key}@ondemand.us-west-1.saucelabs.com:443/wd/hub"
+    sauce_url = f"https://{sauce_username}:{sauce_access_key}@ondemand.eu-central-1.saucelabs.com:443/wd/hub"
     
     print("\n📱 Initializing remote real-device Appium session on Sauce Labs...")
     options = UiAutomator2Options()
