@@ -6,7 +6,7 @@ class LoginPage:
     def __init__(self, driver):
         self.driver = driver
         
-        # 🎯 NAVIGATION TARGETS
+        # 🎯 APP NAVIGATION SELECTORS
         self.sidebar_menu_button = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().descriptionContains("menu")')
         self.sidebar_login_item = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().textContains("Log In")')
         
@@ -37,22 +37,23 @@ class LoginPage:
         self.driver.find_element(*self.login_button).click()
 
     def get_error_message_text(self):
-        """Intercepts both native Android System Dialog Alerts and on-screen text overlays."""
+        """Intercepts the error notification directly from the Android layout view tree."""
+        # ⏳ Give the UI warning container 5 seconds to animate and settle on screen
+        WebDriverWait(self.driver, 5)
+        
+        # 🎯 Dynamic layout scrape: find any text component containing security warning keywords
+        error_selector = (AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().textMatches("(?i).*(credentials|incorrect|match|password|user).*")')
         try:
-            # ⏳ Look for a native Android UI Alert popup box context first (Max 5s wait)
-            WebDriverWait(self.driver, 5).until(EC.alert_is_present())
-            alert = self.driver.switch_to.alert
-            alert_text = alert.text
-            print(f"⚠️ Native Android Dialog Alert Intercepted: '{alert_text}'")
-            alert.accept() # Dismiss the pop-up modal so the session cleans up cleanly
-            return alert_text
+            element = self.driver.find_element(*error_selector)
+            # Pull the display string using the native get_attribute call for complete reliability
+            text_found = element.get_attribute("text") or element.text
+            print(f"🔍 Automation found validation text: '{text_found}'")
+            return text_found
         except:
-            # 🔄 Fallback: If no system dialog modal box popped up, scrape the screen elements directly
-            print("🔍 No native dialog box found, scraping screen text layers instead...")
-            fallback_badge = (AppiumBy.XPATH, "//*[contains(@text, '')]")
-            elements = self.driver.find_elements(*fallback_badge)
-            for el in elements:
-                text_val = el.text
-                if any(word in text_val.lower() for word in ["credential", "incorrect", "match", "password", "user"]):
-                    return text_val
+            print("⚠️ Direct selector missed, performing universal fallback string extraction...")
+            all_text_elements = self.driver.find_elements(AppiumBy.XPATH, "//*[@text!='']")
+            for el in all_text_elements:
+                val = el.get_attribute("text")
+                if any(word in val.lower() for word in ["credential", "incorrect", "match", "password"]):
+                    return val
             return ""
