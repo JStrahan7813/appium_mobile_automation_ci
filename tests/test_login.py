@@ -2,7 +2,7 @@ import os
 import pytest
 from appium import webdriver
 from appium.options.android import UiAutomator2Options
-from pages.login_page import LoginPage
+from pages.login_page import LoginPage 
 
 @pytest.fixture(scope="function")
 def driver():
