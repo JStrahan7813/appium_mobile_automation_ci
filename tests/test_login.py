@@ -19,7 +19,7 @@ def driver():
     options.platform_name = "Android"
     options.automation_name = "UiAutomator2"
     
-    # Securely matches the app binary layout uploaded via curl in your yaml file
+    # Matches the compliant demo build uploaded via curl in your yaml file
     options.set_capability("appium:app", "storage:filename=mda-2.2.0-25.apk")
     
     options.set_capability("sauce:options", {
@@ -33,7 +33,7 @@ def driver():
     driver.quit()
 
 
-# 🎯 THE ACTUAL TEST AUTOMATION RUNS HERE
+# 🎯 THE AUTOMATED MOBILE TEST RUNS HERE
 def test_invalid_login_error_message(driver):
     """Validates that entering wrong credentials triggers the correct warning badge."""
     print("🚀 Test script executing live on Sauce Labs physical device...")
@@ -41,19 +41,24 @@ def test_invalid_login_error_message(driver):
     # Connect the driver instance to our Page Object layout structure
     login_page = LoginPage(driver)
     
-    # 📱 Step 1: Wait 3 seconds to let the mobile application draw smoothly on the screen
+    # 📱 Step 1: Wait for app loading animation to finish drawing
     time.sleep(3)
     
-    # 📱 Step 2: Leverage our Page Object methods to type details into the app inputs
+    # 📱 Step 2: Open side navigation panel and navigate to login form
+    print("🗺️ Navigating to the Login screen...")
+    login_page.navigate_to_login_screen()
+    time.sleep(2)
+    
+    # 📱 Step 3: Populate user details using our Page Object methods
     print("✍️ Typing invalid credentials...")
     login_page.enter_credentials("wrong_user@example.com", "bad_password")
     
-    # 📱 Step 3: Trigger the touch tap execution command on the login submit link
+    # 📱 Step 4: Submit form action button
     print("🖱️ Clicking login button...")
     login_page.click_login()
+    time.sleep(2)
     
-    # 📱 Step 4: Extract the system error text and make sure it behaves correctly
-    time.sleep(1)
+    # 📱 Step 5: Capture error text and validate it against expectations
     error_text = login_page.get_error_message_text()
     print(f"🔍 Found error message on screen: '{error_text}'")
     
